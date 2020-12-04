@@ -36,7 +36,7 @@ def CreateMother(dir_path,object_list,world):
     F.write('<rotation name="identity" x="0" y="0" z="0"/>\n')
     F.write('</define>\n')
     #write material information
-    F.write('<materials>\n')  
+    F.write('<materials>\n')
     F.write('<element name="Vacuum_el"  formula="Hv" Z="1">\n')
     F.write('<atom value="1.008"/>\n')
     F.write('</element> \n')
@@ -66,14 +66,14 @@ def CreateMother(dir_path,object_list,world):
     F.write('<setup name="Default" version="1.0">\n')
     F.write('<world ref="World"/>\n')
     F.write('</setup>\n')
-    F.write('</gdml>') 
+    F.write('</gdml>')
     F.close()
 
-     
-####################Function to write individual volume GDML file#####################     
+
+####################Function to write individual volume GDML file#####################
 def CreateGDML(obj,vol_numb,path_to_mesh):
     import Mesh
-    precision=obj.VolumeMMD   
+    precision=obj.VolumeMMD
     triangles = obj.VolumeCAD.Shape.tessellate(precision) #the number represents the precision of the tessellation #returns matrix with triangles vertices
     count=0
     gdml_name=str(obj.VolumeCAD.Label)+str(vol_numb) #gdml file name derives from volume label and number
@@ -85,26 +85,28 @@ def CreateGDML(obj,vol_numb,path_to_mesh):
     #write position
     F.write(' <define>\n')
     for tri in triangles[0]:
-        F.write(' <position name="'+gdml_name+'_v'+str(count)+'" unit="mm" x="'+str(tri[0])+'" y="'+str(tri[1])+'" z="'+str(tri[2])+'"/>\n')
-        count=count+1	
+        #this used to have the gdml_name in front of the vertex
+        #doesnt make sense with the root parser since it adds the file name to the end
+        F.write(' <position name="v'+str(count)+'" unit="mm" x="'+str(tri[0])+'" y="'+str(tri[1])+'" z="'+str(tri[2])+'"/>\n')
+        count=count+1
     F.write(" </define>\n\n")
     #write material
-    if obj.VolumeMaterial.Nelements!=0:    
-        mat_state="solid"   
+    if obj.VolumeMaterial.Nelements!=0:
+        mat_state="solid"
         F.write(' <materials>\n')
         F.write('   <material name="'+str(obj.VolumeMaterial.Name)+'" state="'+mat_state+'">\n')
-        F.write('       <D unit="g/cm3" value="'+str(obj.VolumeMaterial.Density)+'"/>\n')        
+        F.write('       <D unit="g/cm3" value="'+str(obj.VolumeMaterial.Density)+'"/>\n')
         for i in range (0,obj.VolumeMaterial.Nelements):
-            F.write('       <fraction n="'+str(obj.VolumeMaterial.ElementFractions[i])+'" ref="'+str(obj.VolumeMaterial.Elements[i])+'"/>\n')          
-        F.write('   </material>\n')         
+            F.write('       <fraction n="'+str(obj.VolumeMaterial.ElementFractions[i])+'" ref="'+str(obj.VolumeMaterial.Elements[i])+'"/>\n')
+        F.write('   </material>\n')
         F.write(' </materials>\n')
-        
+
     #write solids
     F.write(" <solids>\n")
     F.write(' <tessellated aunit="deg" lunit="mm" name="'+gdml_name+'_solid">\n')
     count=0
     for tri in triangles[1]:
-        F.write(' <triangular vertex1="'+gdml_name+'_v'+str(tri[0])+'" vertex2="'+gdml_name+'_v'+str(tri[1])+'" vertex3="'+gdml_name+'_v'+str(tri[2])+'"/>'+"\n")
+        F.write(' <triangular vertex1="v'+str(tri[0])+'_/home/ricardo/Documents/GDMLfiles/Volumes/'+gdml_name+'.gdml" vertex2="v'+str(tri[1])+'_/home/ricardo/Documents/GDMLfiles/Volumes/'+gdml_name+'.gdml" vertex3="v'+str(tri[2])+'_/home/ricardo/Documents/GDMLfiles/Volumes/'+gdml_name+'.gdml"/>'+"\n")
         count+=3
     F.write(' </tessellated>\n')
     F.write(' <box lunit="mm" name="worldsolid" x="1000" y="1000" z="1000"/>\n')
@@ -129,7 +131,7 @@ def Write_Files(obj_list, world_list):
     # Create Volumes Directory (does not remove folders)
     try:
         os.mkdir(str(write_dir)+"/Volumes")
-        print("Directory " , str(write_dir)+"/Volumes" ,  " Created ") 
+        print("Directory " , str(write_dir)+"/Volumes" ,  " Created ")
     except:
         print("Directory " , str(write_dir)+"/Volumes" ,  " already exists")
     #Create mother gdml
@@ -140,5 +142,5 @@ def Write_Files(obj_list, world_list):
         if obj.VolumeGDMLoption==1:
             CreateGDML(obj,counter,write_dir)
         counter+=1
-    tkMessageBox.showinfo("Message", 'GDML Files ready.')        
+    tkMessageBox.showinfo("Message", 'GDML Files ready.')
 #Note: A number is added to each volumes label to avoid that two different volumes have the same name. This can be seen in the mother and in the volumes GDMLs
