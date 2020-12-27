@@ -32,7 +32,7 @@ def CreateMother(dir_path,object_list,world):
     F.write('<?xml version="1.0" encoding="UTF-8" ?>\n')
     F.write('<gdml xmlns:gdml="../schema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../schema/gdml.xsd" >\n')
     F.write('<define>\n')
-    F.write('<variable name="suffix" value="_/home/ricardo/Documents/GDMLfiles/Volumes/"')
+    F.write('<variable name="suffix" value="_/home/ricardo/Documents/GDMLfiles/Volumes/">\n')
     F.write('<position name="center" x="0" y="0" z="0"/>\n')
     F.write('<rotation name="identity" x="0" y="0" z="0"/>\n')
     F.write('</define>\n')
@@ -85,7 +85,7 @@ def CreateGDML(obj,vol_numb,path_to_mesh):
     F.write('<gdml xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://service-spi.web.cern.ch/service-spi/app/releases/GDML/schema/gdml.xsd">\n')
     #write position
     F.write(' <define>\n')
-    F.write(' <variable name="suffix" value="_/home/ricardo/Documents/GDMLfiles/Volumes/"')
+    F.write(' <variable name="suffix" value="_/home/ricardo/Documents/GDMLfiles/Volumes/">\n')
     for tri in triangles[0]:
         F.write(' <position name="v'+str(count)+'" unit="mm" x="'+str(tri[0])+'" y="'+str(tri[1])+'" z="'+str(tri[2])+'"/>\n')
         count=count+1
