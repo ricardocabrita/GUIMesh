@@ -47,7 +47,7 @@ def CreateMother(dir_path,object_list,world):
     F.write('</materials>\n')
     #write solid information (world volume)
     F.write('<solids>\n')
-    F.write('<box name="WorldBox" x="'+str(world[0])+'" y="'+str(world[1])+'" z="'+str(world[2])+'" lunit="m"/>\n')
+    F.write('<box name="WorldBox" x="'+str(world[0]*1000)+'" y="'+str(world[1]*1000)+'" z="'+str(world[2]*1000)+'" lunit="mm"/>\n')
     F.write('</solids>\n')
     #write structure
     F.write('<structure>\n')
@@ -73,6 +73,9 @@ def CreateMother(dir_path,object_list,world):
 ####################Function to write individual volume GDML file#####################
 def CreateGDML(obj,vol_numb,path_to_mesh):
     import Mesh
+    ##### because ROOT appends the filename to objects from individual subfiles
+    sufix = '_/home/ricardo/Documents/GDMLfiles/Volumes/'
+    #####
     precision=obj.VolumeMMD
     triangles = obj.VolumeCAD.Shape.tessellate(precision) #the number represents the precision of the tessellation #returns matrix with triangles vertices
     count=0
@@ -106,7 +109,7 @@ def CreateGDML(obj,vol_numb,path_to_mesh):
     F.write(' <tessellated aunit="deg" lunit="mm" name="'+gdml_name+'_solid">\n')
     count=0
     for tri in triangles[1]:
-        F.write(' <triangular vertex1="v'+str(tri[0])+'_/home/ricardo/Documents/GDMLfiles/Volumes/'+gdml_name+'.gdml" vertex2="v'+str(tri[1])+'_/home/ricardo/Documents/GDMLfiles/Volumes/'+gdml_name+'.gdml" vertex3="v'+str(tri[2])+'_/home/ricardo/Documents/GDMLfiles/Volumes/'+gdml_name+'.gdml"/>'+"\n")
+        F.write(' <triangular vertex1="v'+str(tri[0])+sufix+gdml_name+'.gdml" vertex2="v'+str(tri[1])+sufix+gdml_name+'.gdml" vertex3="v'+str(tri[2])+sufix+gdml_name+'.gdml" type="sphv"/>'+"\n")
         count+=3
     F.write(' </tessellated>\n')
     F.write(' <box lunit="mm" name="worldsolid" x="1000" y="1000" z="1000"/>\n')
