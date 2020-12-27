@@ -32,7 +32,7 @@ def CreateMother(dir_path,object_list,world):
     F.write('<?xml version="1.0" encoding="UTF-8" ?>\n')
     F.write('<gdml xmlns:gdml="../schema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../schema/gdml.xsd" >\n')
     F.write('<define>\n')
-    F.write('<variable name="suffix" value="/home/ricardo/Documents/GDMLfiles/Volumes/"/>\n')
+    F.write('<variable name="abspath" value="/home/ricardo/Documents/GDMLfiles/Volumes/"/>\n')
     F.write('<position name="center" x="0" y="0" z="0"/>\n')
     F.write('<rotation name="identity" x="0" y="0" z="0"/>\n')
     F.write('</define>\n')
@@ -58,7 +58,7 @@ def CreateMother(dir_path,object_list,world):
     for i in range(0,len(object_list)):
         if (object_list[i].VolumeGDMLoption==1):
             F.write('<physvol>\n')
-            F.write('<file name="[suffix]'+str(object_list[i].VolumeCAD.Label)+str(i+1)+'.gdml"/>\n')
+            F.write('<file name="[abspath]'+str(object_list[i].VolumeCAD.Label)+str(i+1)+'.gdml"/>\n')
             F.write('<positionref ref="center"/>\n')
             F.write('<rotationref ref="identity"/>\n')
             F.write('</physvol>\n')
@@ -85,7 +85,7 @@ def CreateGDML(obj,vol_numb,path_to_mesh):
     F.write('<gdml xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://service-spi.web.cern.ch/service-spi/app/releases/GDML/schema/gdml.xsd">\n')
     #write position
     F.write(' <define>\n')
-    F.write(' <variable name="suffix" value="/home/ricardo/Documents/GDMLfiles/Volumes/"/>\n')
+    F.write(' <variable name="abspath" value="/home/ricardo/Documents/GDMLfiles/Volumes/"/>\n')
     for tri in triangles[0]:
         F.write(' <position name="v'+str(count)+'" unit="mm" x="'+str(tri[0])+'" y="'+str(tri[1])+'" z="'+str(tri[2])+'"/>\n')
         count=count+1
@@ -106,7 +106,7 @@ def CreateGDML(obj,vol_numb,path_to_mesh):
     F.write(' <tessellated aunit="deg" lunit="mm" name="'+gdml_name+'_solid">\n')
     count=0
     for tri in triangles[1]:
-        F.write(' <triangular vertex1="v'+str(tri[0])+'_[suffix]" vertex2="v'+str(tri[1])+'_[suffix]" vertex3="v'+str(tri[0])+'_[suffix]" type="sphv"/>'+"\n")
+        F.write(' <triangular vertex1="v'+str(tri[0])+'_[abspath]" vertex2="v'+str(tri[1])+'_[abspath]" vertex3="v'+str(tri[0])+'_[abspath]" type="sphv"/>'+"\n")
         count+=3
     F.write(' </tessellated>\n')
     F.write(' <box lunit="mm" name="worldsolid" x="1000" y="1000" z="1000"/>\n')
