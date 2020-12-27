@@ -25,6 +25,10 @@ import Volumes
 import tkFileDialog
 import tkMessageBox
 
+##### because ROOT appends the filename to objects from individual subfiles
+abs_path = '/home/ricardo/Documents/GDMLfiles/Volumes/'
+#####
+
 #Write Mother.gdml file
 def CreateMother(dir_path,object_list,world):
     #write headers and globals
@@ -57,7 +61,7 @@ def CreateMother(dir_path,object_list,world):
     for i in range(0,len(object_list)):
         if (object_list[i].VolumeGDMLoption==1):
             F.write('<physvol>\n')
-            F.write('<file name="Volumes/'+str(object_list[i].VolumeCAD.Label)+str(i+1)+'.gdml"/>\n')
+            F.write('<file name="'+abs_path+str(object_list[i].VolumeCAD.Label)+str(i+1)+'.gdml"/>\n')
             F.write('<positionref ref="center"/>\n')
             F.write('<rotationref ref="identity"/>\n')
             F.write('</physvol>\n')
@@ -73,9 +77,7 @@ def CreateMother(dir_path,object_list,world):
 ####################Function to write individual volume GDML file#####################
 def CreateGDML(obj,vol_numb,path_to_mesh):
     import Mesh
-    ##### because ROOT appends the filename to objects from individual subfiles
-    sufix = '_/home/ricardo/Documents/GDMLfiles/Volumes/'
-    #####
+
     precision=obj.VolumeMMD
     triangles = obj.VolumeCAD.Shape.tessellate(precision) #the number represents the precision of the tessellation #returns matrix with triangles vertices
     count=0
@@ -109,7 +111,7 @@ def CreateGDML(obj,vol_numb,path_to_mesh):
     F.write(' <tessellated aunit="deg" lunit="mm" name="'+gdml_name+'_solid">\n')
     count=0
     for tri in triangles[1]:
-        F.write(' <triangular vertex1="v'+str(tri[0])+sufix+gdml_name+'.gdml" vertex2="v'+str(tri[1])+sufix+gdml_name+'.gdml" vertex3="v'+str(tri[2])+sufix+gdml_name+'.gdml" type="sphv"/>'+"\n")
+        F.write(' <triangular vertex1="v'+str(tri[0])+'_'+abs_path+gdml_name+'.gdml" vertex2="v'+str(tri[1])+'_'+abs_path+gdml_name+'.gdml" vertex3="v'+str(tri[2])+'_'+abs_path+gdml_name+'.gdml" type="sphv"/>'+"\n")
         count+=3
     F.write(' </tessellated>\n')
     F.write(' <box lunit="mm" name="worldsolid" x="1000" y="1000" z="1000"/>\n')
